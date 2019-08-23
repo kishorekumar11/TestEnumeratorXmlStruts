@@ -5,6 +5,7 @@ import java.util.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +24,7 @@ public class ProcessServlet extends HttpServlet {
 
     private static int MAXFILESIZE = 500* 1024;
     private static int MAXMEMSIZE = 500* 1024;
-
+    public static Vector<Cookie> cookieVector = new Vector<Cookie>();
 
     private static void clearDirectory(String outputDir){
         File file = new File(outputDir);
@@ -41,7 +42,7 @@ public class ProcessServlet extends HttpServlet {
         ZipUtil.pack(new File(zipDir), new File(outputDir+"out.zip"));
     }
 
-    private boolean deleteDirectory(File dir) {
+    public static boolean deleteDirectory(File dir) {
         if(!dir.exists()) {
             return true;
         }
@@ -106,6 +107,12 @@ public class ProcessServlet extends HttpServlet {
         generator.setOutputDir(new File(System.getProperty("user.dir")).getParent() + separator + "webapps" + separator + "TestEnumeratorXml" + separator + "conf" + separator + "outputZip" + separator + generator.getTimeMilli() +separator);
         generator.setOutputFiles(new File(System.getProperty("user.dir")).getParent() + separator + "webapps" + separator + "TestEnumeratorXml" + separator + "conf" + separator + "out" + separator + generator.getTimeMilli() + separator);
 
+        /** Creating Cookies which expires after two days**/
+        Cookie cookie = new Cookie("time",String.valueOf(generator.getTimeMilli()));
+        cookie.setMaxAge(2 * 24 * 3600);
+        response.addCookie(cookie);
+        cookieVector.add(cookie);
+
         /** Calling the main function of Generator Class **/
         /** uploadInputFile returns the name of input file **/
         generator.generate(uploadInputFile(generator.getFilePath(),request,response));
@@ -123,42 +130,50 @@ public class ProcessServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, java.io.IOException {
-        String filePath = new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumeratorXml"+separator+"conf"+separator+"outputZip"+separator+"out.zip";
-        File downloadFile = new File(filePath);
-        if(!downloadFile.exists()) {
-            downloadFile.createNewFile();
-        }
-        FileInputStream inStream = new FileInputStream(downloadFile);
-        ServletContext context = getServletContext();
 
-        // gets MIME type of the file
-        String mimeType = context.getMimeType(filePath);
-        if (mimeType == null) {
-            // set to binary type if MIME mapping not found
-            mimeType = "application/octet-stream";
-        }
+        Cookie cookie = request.getCookies()[0];
+        String timeMilli = cookie.getValue();
 
-        // modifies response
-        response.setContentType(mimeType);
-        response.setContentLength((int) downloadFile.length());
+        PrintWriter out = response.getWriter();
+        out.println(cookie.getName()+" --------- "+cookie.getValue());
 
-        // forces download
-        String headerKey = "Content-Disposition";
-        String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
-        response.setHeader(headerKey, headerValue);
-
-        // obtains response's output stream
-        OutputStream outStream = response.getOutputStream();
-
-        byte[] buffer = new byte[4096];
-        int bytesRead = -1;
-
-        while ((bytesRead = inStream.read(buffer)) != -1) {
-            outStream.write(buffer, 0, bytesRead);
-        }
-
-        inStream.close();
-        outStream.close();
+//        String filePath = new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumeratorXml"+separator+"conf"+separator+"outputZip"+separator+timeMilli+separator+"out.zip";
+//        File downloadFile = new File(filePath);
+//        if(!downloadFile.exists()) {
+//            downloadFile.createNewFile();
+//        }
+//        FileInputStream inStream = new FileInputStream(downloadFile);
+//        ServletContext context = getServletContext();
+//
+//        // gets MIME type of the file
+//        String mimeType = context.getMimeType(filePath);
+//        if (mimeType == null) {
+//            // set to binary type if MIME mapping not found
+//            mimeType = "application/octet-stream";
+//        }
+//
+//        // modifies response
+//        response.setContentType(mimeType);
+//        response.setContentLength((int) downloadFile.length());
+//
+//        // forces download
+//        String headerKey = "Content-Disposition";
+//        String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
+//        response.setHeader(headerKey, headerValue);
+//
+//        // obtains response's output stream
+//        OutputStream outStream = response.getOutputStream();
+//
+//        byte[] buffer = new byte[4096];
+//        int bytesRead = -1;
+//
+//        while ((bytesRead = inStream.read(buffer)) != -1) {
+//            outStream.write(buffer, 0, bytesRead);
+//        }
+//
+//        inStream.close();
+//        outStream.close();
+//          deleteDirectory(new File());
     }
 }
 

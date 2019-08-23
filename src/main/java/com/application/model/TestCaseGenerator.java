@@ -68,11 +68,11 @@ public class TestCaseGenerator {
             invalidElementCombination += ((JSONArray) obj.get("invalidInput")).size();
             invalidDataTypes.add( (JSONArray) ((JSONArray) obj.get("invalidInput")).clone());
         }
-        if(validElementCombination>10000){
-            validElementCombination=10000;
+        if(validElementCombination>5000){
+            validElementCombination=5000;
         }
-        if(invalidElementCombination>10000){
-            invalidElementCombination = 10000;
+        if(invalidElementCombination>5000){
+            invalidElementCombination = 5000;
         }
         LinkedHashMap validCombination = getValidCombinations(validDataTypes,validElementCombination,propKeys,propValues,testCase,jo,link,outputDir,method);
         getInValidCombinations(invalidDataTypes,invalidElementCombination,propKeys,validCombination,jo,link,outputDir,method);
