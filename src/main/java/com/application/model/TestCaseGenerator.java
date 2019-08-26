@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-import static java.io.File.separator;
 
 public class TestCaseGenerator {
 
@@ -33,19 +32,17 @@ public class TestCaseGenerator {
             Object obj = new JSONParser().parse(new FileReader(path));
             return (JSONObject) obj;
         } catch (Exception e) {
-            System.out.println("error " + e);
+            e.printStackTrace();
         }
         return null;
     }
 
     public void createTestCases(LinkedHashMap jo, String link,String outputDir,String method){
         String separator = System.getProperty("file.separator");
-        String path = new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumeratorXml"+separator+"conf"+separator+"testJSON"+separator+"newTestCase.json";
+        String path = new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumerator"+separator+"conf"+separator+"testJSON"+separator+"newTestCase.json";
         JSONObject testCase = getObject(path);
         JSONObject properties = (JSONObject)jo.get("Template");
 
-        System.out.println("path : "+link);
-        System.out.println("properties : "+properties);
         Set<String> keySet = properties.keySet();
         ArrayList<String> propKeys = new ArrayList(keySet);
 
@@ -56,13 +53,8 @@ public class TestCaseGenerator {
         ArrayList<ArrayList> invalidDataTypes = new ArrayList();
         int validElementCombination = 1;
         int invalidElementCombination = 0;
-        System.out.println("propvalues : "+propValues);
         for(String val : propValues){
-            //System.out.println("TestCase : "+testCase);
-            //System.out.println("val : "+val);
-            System.out.println("val : "+val);
             JSONObject obj = (JSONObject)testCase.get(val);
-            System.out.println("obj : "+obj);
             validElementCombination *= ((JSONArray) obj.get("validInput")).size();
             validDataTypes.add( (JSONArray) ((JSONArray) obj.get("validInput")).clone());
             invalidElementCombination += ((JSONArray) obj.get("invalidInput")).size();
@@ -133,7 +125,6 @@ public class TestCaseGenerator {
     private void getInValidCombinations(ArrayList invalidDataTypes, int invalidElementCombination, ArrayList propKeys, LinkedHashMap validCombination,LinkedHashMap jo,String link,String outputDir,String method){
         JSONArray allCombination = new JSONArray();
         ((JSONObject) validCombination.get("testDataMeta")).put("isValidInput",false);
-        System.out.println("invalidDataTypes : "+invalidDataTypes.toString());
         long noOfElements = 0;
         for(int i =0;i<invalidDataTypes.size();i++){
             LinkedHashMap validTestCase = (LinkedHashMap) SerializationUtils.clone(validCombination);
@@ -158,7 +149,6 @@ public class TestCaseGenerator {
 
     private void writeJSON(LinkedHashMap obj,String link,JSONArray combination,String outputDir,String method){
         String separator = System.getProperty("file.separator");
-        //System.out.println("Entered write");
         ObjectMapper mapperMain=new ObjectMapper();
         ObjectWriter writer = mapperMain.writer(new DefaultPrettyPrinter());
         link = link.replaceAll("/","_");

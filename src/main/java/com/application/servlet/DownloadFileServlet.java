@@ -22,9 +22,9 @@ public class DownloadFileServlet extends HttpServlet {
         int vectorItr = 0;
         while(vectorItr<cookieVector.size()) {
             Cookie cookie = cookieVector.get(vectorItr);
-            if( (new Date().getTime()- Long.valueOf(cookie.getValue()) ) > 450000 ) {
-                deleteDirectory(new File(new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumeratorXml"+separator+"conf"+separator+"outputZip"+separator+cookie.getValue()+separator));
-                deleteDirectory(new File(new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumeratorXml"+separator+"conf"+separator+"inputJSON"+separator+cookie.getValue()+separator));
+            if( (new Date().getTime()- Long.valueOf(cookie.getValue()) ) > 86400000 ) {
+                deleteDirectory(new File(new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumerator"+separator+"conf"+separator+"outputZip"+separator+cookie.getValue()+separator));
+                deleteDirectory(new File(new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumerator"+separator+"conf"+separator+"inputJSON"+separator+cookie.getValue()+separator));
                 cookieVector.remove(cookie);
                 cookie.setMaxAge(0);
             }
@@ -50,7 +50,7 @@ public class DownloadFileServlet extends HttpServlet {
         }
 
 
-        String filePath = new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumeratorXml"+separator+"conf"+separator+"outputZip"+separator+timeMilli+separator+"out.zip";
+        String filePath = new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumerator"+separator+"conf"+separator+"outputZip"+separator+timeMilli+separator+"out.zip";
         File downloadFile = new File(filePath);
         if(!downloadFile.exists()) {
             downloadFile.createNewFile();
@@ -86,7 +86,7 @@ public class DownloadFileServlet extends HttpServlet {
 
         inStream.close();
         outStream.close();
-        deleteDirectory(new File(new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumeratorXml"+separator+"conf"+separator+"outputZip"+separator+timeMilli+separator));
+        deleteDirectory(new File(new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumerator"+separator+"conf"+separator+"outputZip"+separator+timeMilli+separator));
         deleteUnwantedZip();
     }
 }

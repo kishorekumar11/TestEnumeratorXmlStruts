@@ -28,10 +28,6 @@
         <servlet-class>com.application.servlet.DownloadFileServlet</servlet-class>
     </servlet>
 
-    <servlet>
-        <servlet-name>DeleteFileServlet</servlet-name>
-        <servlet-class>com.application.servlet.DeleteFileServlet</servlet-class>
-    </servlet>
 
     <servlet-mapping>
         <servlet-name>action</servlet-name>
@@ -48,10 +44,6 @@
         <url-pattern>/DownloadFileServlet</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>DeleteFileServlet</servlet-name>
-        <url-pattern>/DeleteFileServlet</url-pattern>
-    </servlet-mapping>
 
     <welcome-file-list>
         <welcome-file>/jsp/tools.jsp</welcome-file>

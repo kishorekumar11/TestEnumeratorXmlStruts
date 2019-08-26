@@ -10,7 +10,7 @@ import java.util.*;
 
 import static java.io.File.separator;
 
-public class Generator {
+public class TemplateGenerator {
 
     private String filePath;
     private String outputDir;

@@ -3,20 +3,17 @@ package com.application.servlet;
 import java.io.*;
 import java.util.*;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.application.model.Generator;
-import com.application.model.TestCaseGenerator;
+import com.application.model.TemplateGenerator;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.zeroturnaround.zip.ZipUtil;
-import sun.nio.cs.Surrogate;
 
 import static java.io.File.separator;
 
@@ -65,7 +62,7 @@ public class ProcessServlet extends HttpServlet {
         /** maximum size that will be stored in memory **/
         factory.setSizeThreshold(MAXMEMSIZE);
         // Location to save data that is larger than MAXMEMSIZE.
-        //factory.setRepository(new File(new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumeratorXml"+separator+"conf"+separator+"excess"));
+        //factory.setRepository(new File(new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumerator"+separator+"conf"+separator+"excess"));
         /** Create a new file upload handler **/
         ServletFileUpload upload = new ServletFileUpload(factory);
         upload.setSizeMax(MAXFILESIZE);
@@ -99,81 +96,38 @@ public class ProcessServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         /** Creating Object for Generator Class **/
-        Generator generator = new Generator();
+        TemplateGenerator templateGenerator = new TemplateGenerator();
 
         /** Setting the variables in generator object **/
-        generator.setTimeMilli(new Date().getTime());
-        generator.setFilePath(new File(System.getProperty("user.dir")).getParent() + separator + "webapps" + separator + "TestEnumeratorXml" + separator + "conf" + separator + "inputJSON" + separator + generator.getTimeMilli() + separator);
-        generator.setOutputDir(new File(System.getProperty("user.dir")).getParent() + separator + "webapps" + separator + "TestEnumeratorXml" + separator + "conf" + separator + "outputZip" + separator + generator.getTimeMilli() +separator);
-        generator.setOutputFiles(new File(System.getProperty("user.dir")).getParent() + separator + "webapps" + separator + "TestEnumeratorXml" + separator + "conf" + separator + "out" + separator + generator.getTimeMilli() + separator);
+        templateGenerator.setTimeMilli(new Date().getTime());
+        templateGenerator.setFilePath(new File(System.getProperty("user.dir")).getParent() + separator + "webapps" + separator + "TestEnumerator" + separator + "conf" + separator + "inputJSON" + separator + templateGenerator.getTimeMilli() + separator);
+        templateGenerator.setOutputDir(new File(System.getProperty("user.dir")).getParent() + separator + "webapps" + separator + "TestEnumerator" + separator + "conf" + separator + "outputZip" + separator + templateGenerator.getTimeMilli() +separator);
+        templateGenerator.setOutputFiles(new File(System.getProperty("user.dir")).getParent() + separator + "webapps" + separator + "TestEnumerator" + separator + "conf" + separator + "out" + separator + templateGenerator.getTimeMilli() + separator);
 
         /** Creating Cookies which expires after two days**/
-        Cookie cookie = new Cookie("time",String.valueOf(generator.getTimeMilli()));
+        Cookie cookie = new Cookie("time",String.valueOf(templateGenerator.getTimeMilli()));
         cookie.setMaxAge(2 * 24 * 3600);
         response.addCookie(cookie);
         cookieVector.add(cookie);
 
         /** Calling the main function of Generator Class **/
         /** uploadInputFile returns the name of input file **/
-        generator.generate(uploadInputFile(generator.getFilePath(),request,response));
+        templateGenerator.generate(uploadInputFile(templateGenerator.getFilePath(),request,response));
 
         /** Creating the directory where output zip file will be stored **/
-        new File(generator.getOutputDir()).mkdirs();
+        new File(templateGenerator.getOutputDir()).mkdirs();
 
         /** Zipping the output file from outputFiles and storing the zip in outputDir directory **/
-        zipFolder(generator.getOutputFiles(), generator.getOutputDir());
+        zipFolder(templateGenerator.getOutputFiles(), templateGenerator.getOutputDir());
 
         /** Deleting the input file directory and output files stored directory **/
-        deleteDirectory(new File(generator.getOutputFiles()));
-        deleteDirectory(new File(generator.getFilePath()));
+        deleteDirectory(new File(templateGenerator.getOutputFiles()));
+        deleteDirectory(new File(templateGenerator.getFilePath()));
 
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, java.io.IOException {
 
-        Cookie cookie = request.getCookies()[0];
-        String timeMilli = cookie.getValue();
-
-        PrintWriter out = response.getWriter();
-        out.println(cookie.getName()+" --------- "+cookie.getValue());
-
-//        String filePath = new File(System.getProperty("user.dir")).getParent()+separator+"webapps"+separator+"TestEnumeratorXml"+separator+"conf"+separator+"outputZip"+separator+timeMilli+separator+"out.zip";
-//        File downloadFile = new File(filePath);
-//        if(!downloadFile.exists()) {
-//            downloadFile.createNewFile();
-//        }
-//        FileInputStream inStream = new FileInputStream(downloadFile);
-//        ServletContext context = getServletContext();
-//
-//        // gets MIME type of the file
-//        String mimeType = context.getMimeType(filePath);
-//        if (mimeType == null) {
-//            // set to binary type if MIME mapping not found
-//            mimeType = "application/octet-stream";
-//        }
-//
-//        // modifies response
-//        response.setContentType(mimeType);
-//        response.setContentLength((int) downloadFile.length());
-//
-//        // forces download
-//        String headerKey = "Content-Disposition";
-//        String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
-//        response.setHeader(headerKey, headerValue);
-//
-//        // obtains response's output stream
-//        OutputStream outStream = response.getOutputStream();
-//
-//        byte[] buffer = new byte[4096];
-//        int bytesRead = -1;
-//
-//        while ((bytesRead = inStream.read(buffer)) != -1) {
-//            outStream.write(buffer, 0, bytesRead);
-//        }
-//
-//        inStream.close();
-//        outStream.close();
-//          deleteDirectory(new File());
     }
 }
 

@@ -3,6 +3,6 @@
 <project name="TestEnumerator">
     <target name="package">
         <mkdir dir="build"/>
-        <jar basedir="target/classes" destfile="build/TestEnumeratorXml.jar"/>
+        <jar basedir="target/classes" destfile="build/TestEnumerator.jar"/>
     </target>
 </project>

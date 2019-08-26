@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+ <!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+       "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+
+<!--
+     This is a blank Tiles definition file with a commented example.
+-->
+
+<tiles-definitions>
+
+   <definition name="layout" path="/jsp/layout.jsp">
+        <put name="title" value="Tools"/>
+        <put name="header" value="/jsp/header.jsp"/>
+        <put name="menu" value="/jsp/menu.jsp"/>
+        <put name="body" value="/jsp/body.jsp"/>
+    </definition>
+    <definition name="DD-Diff" extends="layout">
+        <put name="title" value="DD-Diff"/>
+        <put name="body" value="/jsp/dd-diff.jsp"/>
+    </definition>
+
+</tiles-definitions>
+<!-- $Id$ -->
