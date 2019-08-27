@@ -20,15 +20,15 @@
 		"invalidInput" : [123,true]
 	},
 	"weekdayinnumber": {
-		"validInput" : [1,7],
-		"invalidInput" : [8,"abc"]
+		"validInput" : ["1,2","1,02,"],
+		"invalidInput" : ["9,5","abc"]
 	},
 	"multipleemail": {
-		"validInput" : ["abc@xyz.com hello@hello.com", "abc@abc.com"],
+		"validInput" : ["abc@xyz.com", "abc@abc.com"],
 		"invalidInput" : [123,"abc"]
 	},
 	"^\\w{2}\\\/\\w{2}\\\/\\w{4}$": {
-		"validInput" : ["Me/8T/Mum4","pA/h6/4iOa"],
+		"validInput" : ["31/12/2020","02/05/2030"],
 		"invalidInput" : ["a/b","abc"]
 	},
 	"[Mm]ac|[Ww]indows|[lL]inux|[aA]ll": {
@@ -36,7 +36,7 @@
 		"invalidInput" : [123,"MAC"]
 	},
 	"numeric": {
-		"validInput" : [1,7.1],
+		"validInput" : [123456,9990],
 		"invalidInput" : [false,"abc"]
 	},
 	"ad|manual": {
@@ -48,8 +48,8 @@
 		"invalidInput" : [8.2,"jkl"]
 	},
 	"safestring": {
-		"validInput" : ["hello","abc"],
-		"invalidInput" : ["j12b",true]
+		"validInput" : ["abc@12.9lz","12l%09.9lz"],
+		"invalidInput" : ["a$b",true]
 	},
 	"emailstring": {
 		"validInput" : ["abc@xy.com", "xy12@jkl.com"],
@@ -60,7 +60,7 @@
 		"invalidInput" : [45678,"abc"]
 	},
 	"timeformat_dd_mm_yyyy_mm_ss": {
-		"validInput" : ["20_08_2019_35_17","10_10_2050_45_59"],
+		"validInput" : ["27/8/2019, 05:37","11/10/3000, 22:15"],
 		"invalidInput" : [45678,"abc"]
 	},
 	"acceptall": {
@@ -68,12 +68,12 @@
 		"invalidInput" : [""]
 	},
 	"timeformat_HH_mm": {
-		"validInput" : ["20_30","12_45"],
-		"invalidInput" : ["25_00","abc"]
+		"validInput" : ["21:25","13:16"],
+		"invalidInput" : ["30:15","abc"]
 	},
 	"alphanumeric": {
-		"validInput" : ["ab12c","jkl123"],
-		"invalidInput" : [false,345]
+		"validInput" : ["ab12c","-abc12"],
+		"invalidInput" : [false,"ab-cd"]
 	},
 	"customGroup|computers": {
 		"validInput" : ["customGroup","computers"],
@@ -84,16 +84,16 @@
 		"invalidInput" : ["abc",false]
 	},
 	"weekinnumber": {
-		"validInput" : [12,30],
-		"invalidInput" : ["abc",false]
+		"validInput" : ["2,2","123"],
+		"invalidInput" : ["7,5",false]
 	},
 	"daysinnumber": {
 		"validInput" : [12,30],
-		"invalidInput" : ["abc",false]
+		"invalidInput" : ["35",false]
 	},
 	"longwithcomma": {
-		"validInput" : ["123456789,","4114555,"],
-		"invalidInput" : ["abc",1.52]
+		"validInput" : ["123456789,","4114555"],
+		"invalidInput" : ["abc","1.52"]
 	},
 	"longvalue": {
 		"validInput" : [12,3065454],
@@ -104,7 +104,7 @@
 		"invalidInput" : ["abc",false]
 	},
 	"od_cleartextpattern": {
-		"validInput" : ["abc","ab12c"],
+		"validInput" : ["aaabbbcccd","aaaa12+cccd"],
 		"invalidInput" : [4.12,false]
 	},
 	"^[0-9]{1,4}": {
